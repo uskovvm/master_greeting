@@ -95,7 +95,7 @@ public class GreetingControllerTests {
 		// this.greetingList.add(greetingRepository.save(new Greeting(event,
 		// "Instruction")));
 	}
-/*
+
 	@Test
 	public void createEvent() throws Exception {
 		Event theEvent = new Event("Event description");
@@ -124,7 +124,7 @@ public class GreetingControllerTests {
 		this.mockMvc.perform(post("/" + greeting.getId() + "/question").contentType(contentType).content(questionJson))
 				.andExpect(status().isOk());
 	}
-*/
+
 	@Test
 	public void findByGreetingIdAndParticipantId() throws Exception {
 		//  /greeting/{greetingId}/{participantId}
