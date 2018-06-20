@@ -23,8 +23,8 @@ public class Answer {
     @ManyToOne
     @JoinColumn(name="participant_id", nullable=true)
 	private Participant participant;
-    
     private String text;
+    private int imageNumber;
 
 	
 	public Answer() {
@@ -45,6 +45,14 @@ public class Answer {
 	}
 	public void setText(String text) {
 		this.text = text;
+	}
+
+	public int getImageNumber() {
+		return imageNumber;
+	}
+
+	public void setImageNumber(int imageNumber) {
+		this.imageNumber = imageNumber;
 	}
 
 }
