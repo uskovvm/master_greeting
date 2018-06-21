@@ -118,7 +118,9 @@ public class GreetingControllerTests {
 	@Test
 	public void createQuestion() throws Exception {
 		Greeting greeting = greetingRepository.save(new Greeting("Greeting Instruction"));
-		Question question = new Question("question");
+		List<String> questionTexts = new ArrayList();
+		questionTexts.add("question");
+		Question question = new Question(questionTexts);
 		String questionJson = json(question);
 
 		this.mockMvc.perform(post("/" + greeting.getId() + "/question").contentType(contentType).content(questionJson))

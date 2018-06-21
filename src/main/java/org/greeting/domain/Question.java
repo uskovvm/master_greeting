@@ -1,12 +1,22 @@
 package org.greeting.domain;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.greeting.QuestionType;
 
 @Entity
 @Table(name="questions")
@@ -20,17 +30,20 @@ public class Question {
     @ManyToOne
     @JoinColumn(name="participant_id", nullable=true)
 	private Participant participant;
+    @Column
+    @ElementCollection(targetClass=String.class)
+    private List<String> questionTexts;
+	private QuestionType type;
+	@OneToMany(cascade=CascadeType.ALL, mappedBy="question")
+	private Set<Answer> answers= new HashSet<>();
 
-	private String question;
-	private String answer;
-	private String type;
 
 	
 	public Question() {
 	}
 
-	public Question(String text) {
-		this.setQuestion(text);
+	public Question(List<String> questionTexts) {
+		this.questionTexts=questionTexts;
 	}
 
 	public long getId() {
@@ -46,27 +59,30 @@ public class Question {
 		this.greeting = greeting;
 	}
 
-	public String getType() {
+
+	public QuestionType getType() {
 		return type;
 	}
-	public void setType(String type) {
+
+	public void setType(QuestionType type) {
 		this.type = type;
 	}
 
-	public String getQuestion() {
-		return question;
+	public List<String> getQuestionTexts() {
+		return questionTexts;
 	}
 
-	public void setQuestion(String question) {
-		this.question = question;
+	public void setQuestionTexts(List<String> questionTexts) {
+		this.questionTexts = questionTexts;
 	}
 
-	public String getAnswer() {
-		return answer;
+	public Set<Answer> getAnswers() {
+		return answers;
 	}
 
-	public void setAnswer(String answer) {
-		this.answer = answer;
+	public void setAnswers(Set<Answer> answers) {
+		this.answers = answers;
 	}
+
 
 }

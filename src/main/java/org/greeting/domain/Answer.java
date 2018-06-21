@@ -17,14 +17,12 @@ public class Answer {
     @ManyToOne
     @JoinColumn(name="greeting_id", nullable=true)
 	private Greeting greeting;
-	@ManyToOne
-    @JoinColumn(name="question_id", nullable=true)
-	private Question question;
     @ManyToOne
     @JoinColumn(name="participant_id", nullable=true)
 	private Participant participant;
     private String text;
     private int imageNumber;
+    private int questionIndex;
 
 	
 	public Answer() {
@@ -53,6 +51,14 @@ public class Answer {
 
 	public void setImageNumber(int imageNumber) {
 		this.imageNumber = imageNumber;
+	}
+
+	public int getQuestionIndex() {
+		return questionIndex;
+	}
+
+	public void setQuestionIndex(int questionIndex) {
+		this.questionIndex = questionIndex;
 	}
 
 }

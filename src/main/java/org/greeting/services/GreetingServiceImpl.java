@@ -8,14 +8,22 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
+import org.greeting.QuestionType;
 import org.greeting.domain.Answer;
+import org.greeting.domain.Greeting;
 import org.greeting.domain.Question;
+import org.greeting.repositories.GreetingRepository;
+import org.greeting.services.utils.GreetingUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @Transactional(readOnly = true)
 class GreetingServiceImpl implements GreetingService {
+
+	@Autowired
+	private GreetingRepository greetingRepository;
 
 	@PersistenceContext
 	private EntityManager em;
@@ -26,7 +34,34 @@ class GreetingServiceImpl implements GreetingService {
 	}
 
 	@Override
-	public List<Question> findByGreetingIdAndParticipantId(String greetingId, String participantId) {
+	public Answer getQuestionByGreetingIdAndQuestionType(String greetingId, String questionType) {
+
+		TypedQuery<Question> query = em.createQuery("select q from Question q where q.greeting.id = ?1 and q.type = ?2",
+				Question.class);
+		query.setParameter(1, new Long(greetingId));
+		query.setParameter(2, new Long(questionType));
+
+		Question question = query.getSingleResult();
+
+		Answer answer = new Answer();
+
+		switch (QuestionType.valueOf(questionType)) {
+		case SIMPLE:
+			answer.setQuestionIndex(0);
+			break;
+		case RANDOM:
+			answer.setQuestionIndex(GreetingUtils.getRandomResult(question));
+			break;
+		case ASSOCIATE:
+			answer.setQuestionIndex(0);
+			answer.setImageNumber(GreetingUtils.getImageNumber(question));
+			break;
+		}
+		return answer;
+	}
+
+	@Override
+	public List<Question> getQuestionsByGreetingIdAndParticipantId(String greetingId, String participantId) {
 
 		TypedQuery<Question> query = em.createQuery(
 				"select q from Question q where q.greeting.id = ?1 and q.participant.id = ?2", Question.class);

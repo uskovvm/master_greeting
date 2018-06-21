@@ -29,14 +29,15 @@ public class GreetingController {
 	@Autowired
 	private GreetingService greetingService;
 
+	//Ёндпоинт дл€ получени€ всех вопросов участника
 	@RequestMapping("/greeting/{greetingId}/{participantId}")
 	public List<Question> greeting(@PathVariable String greetingId, @PathVariable String participantId) {
 
-		List<Question> greetings = greetingService.findByGreetingIdAndParticipantId(greetingId, participantId);
-		return greetings;
+		List<Question> questions = greetingService.getQuestionsByGreetingIdAndParticipantId(greetingId, participantId);
+		return questions;
 	}
 
-
+	//Ёндпоинт дл€ добавлени€ Greeting
 	@PostMapping("/{eventId}/greeting")
 	public Greeting addGreeting(@PathVariable String eventId, @RequestBody Greeting input) {
 		Event event = this.eventRepository.findById(new Long(eventId)).get();
@@ -45,6 +46,14 @@ public class GreetingController {
 		return input;
 	}
 
+	//Ёндпоинт дл€ получени€ вопроса заданного типа
+	//Answer содержит ссылку на вопрос
+	@RequestMapping("/greeting/{greetingId}/{questionType}")
+	public Answer getQuestion(@PathVariable String greetingId, @PathVariable String questionType) {
+		return greetingService.getQuestionByGreetingIdAndQuestionType(greetingId, questionType);
+	}
+	
+	//Ёндпоинт дл€ добавлени€ вопроса
 	@PostMapping("/{greetingId}/question")
 	public Question addQuestion(@PathVariable String greetingId, @RequestBody Question input) {
 		Greeting greeting = this.greetingRepository.findById(new Long(greetingId)).get();
